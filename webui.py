@@ -18,8 +18,7 @@ def main():
         with st.expander("Settings", expanded=True):
             api_key = st.text_input("OpenAI API Key", type="password", value=st.session_state.get("api_key", ""))
             base_url = st.text_input("Base URL", value=st.session_state.get("base_url", "https://api.openai.com/v1"))
-            model = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o"], 
-                                 index=["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o"].index(st.session_state.get("model", "gpt-4o-mini")))
+            model = st.text_input("Model", value=st.session_state.get("model", "gpt-4o-mini"))
             
             # Save settings to session state
             st.session_state.api_key = api_key
