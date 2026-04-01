@@ -6,11 +6,34 @@ from analyser import analyze_log
 def main():
     st.title("AI Log Analyser")
     
-    with st.sidebar:
-        st.header("Settings")
-        api_key = st.text_input("OpenAI API Key", type="password")
-        base_url = st.text_input("Base URL", value="https://api.openai.com/v1")
-        model = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o"], index=0)
+    # Settings button in header
+    with st.container():
+        col1, col2 = st.columns([6, 1])
+        with col2:
+            if st.button("⚙️ Settings", key="settings_btn"):
+                st.session_state.show_settings = not st.session_state.get("show_settings", False)
+    
+    # Settings modal
+    if st.session_state.get("show_settings", False):
+        with st.expander("Settings", expanded=True):
+            api_key = st.text_input("OpenAI API Key", type="password", value=st.session_state.get("api_key", ""))
+            base_url = st.text_input("Base URL", value=st.session_state.get("base_url", "https://api.openai.com/v1"))
+            model = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o"], 
+                                 index=["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o"].index(st.session_state.get("model", "gpt-4o-mini")))
+            
+            # Save settings to session state
+            st.session_state.api_key = api_key
+            st.session_state.base_url = base_url
+            st.session_state.model = model
+            
+            if st.button("Close Settings"):
+                st.session_state.show_settings = False
+                st.rerun()
+    else:
+        # Load settings from session state
+        api_key = st.session_state.get("api_key", "")
+        base_url = st.session_state.get("base_url", "https://api.openai.com/v1")
+        model = st.session_state.get("model", "gpt-4o-mini")
     
     st.write("Input log")
 
